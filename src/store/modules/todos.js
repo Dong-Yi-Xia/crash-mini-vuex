@@ -18,7 +18,7 @@ const actions = {
     commit('setTodos', response.data)
   },
 
-  //POST request, a new todo
+  //Create / POST request, a new todo
   async addTodo( { commit }, title){
     const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {title, completed: false})
     //commit a mutation, like .then do something with the data
@@ -40,7 +40,14 @@ const actions = {
 
     const response = await axios.get(`https://jsonplaceholder.typicode.com/todos?_limit=${limit}`)
     commit('setTodos', response.data)
-  }
+  },
+
+  //Update Request
+  async updateTodo({ commit }, updatedTodo ){
+    const response = await axios.patch(`https://jsonplaceholder.typicode.com/todos/${updatedTodo.id}`, updatedTodo)
+    // console.log(response.data)
+    commit('updTodo', response.data)
+  },
 
 };
 
@@ -55,6 +62,14 @@ const mutations = {
   //deleting a todo
   removeTodo: (state, id) =>
     state.todos = state.todos.filter(todo => todo.id !== id),
+
+  //update todo
+  updTodo: (state, updTodo) => {
+    const index = state.todos.findIndex(todo => todo.id === updTodo.id);
+    if(index !== -1){
+      state.todos.splice(index, 1, updTodo)
+    }
+  },
 
 };
 
