@@ -48,7 +48,7 @@ new Vue({
 // console.log(store.getters.getTodoById(48))
 
 
-// the shorthand for getters
+// the shorthand for getters. A helper function
 import { mapGetters } from 'vuex';
 
 new Vue({
@@ -56,7 +56,13 @@ new Vue({
     store,
     data: {
     },
-    computed: mapGetters([
-        'doneTodos', 'doneTodosCount', 'getTodoById'
-    ])
+    // computed: mapGetters([
+    //     'doneTodos', 'doneTodosCount', 'getTodoById'
+    // ])
+    computed: {
+        // when computed uses {}, need to spread the map Helper Function
+        ...mapGetters([
+            'doneTodos', 'doneTodosCount', 'getTodoById'
+        ])
+    }
 });
