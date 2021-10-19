@@ -43,13 +43,13 @@ const store = new Vuex.Store({
               commit('someOtherMutation')
           })
         },
-        //the commit 'gotData' will not mutate until getData() comes back
+        //the commit 'gotData' will not mutate until getData() Promise comes back
         async actionC ({ commit }) {
             //commit type and payload
             commit('gotData', await getData())
         },
         //wait for dispatch('actionC') then
-        //the commit 'gotOtherData' will not mutate until getOtherData() comes back
+        //the commit 'gotOtherData' will not mutate until getOtherData() Promise comes back
         async actionD ({ dispatch, commit} ) {
             await dispatch('actionC')
             commit('gotOtherData', await getOtherData())
@@ -71,6 +71,15 @@ new Vue({
           //calling the action with dispatch, can also pass in a payload just like mutation
           //this.$store.dispatch('incrementAsync', payload);
           this.$store.dispatch('incrementAsync');
+
+          // Dispatch with payload
+          // this.$store.dispatch('incrementAsync', {amount: 1000});
+
+          // Dispatch with an object
+          // this.$store.dispatch({
+          //   type: 'incrementAsync',
+          //   amount: 1000,
+          // });
         },
         decrement () {
             this.$store.commit('decrement');
@@ -101,9 +110,12 @@ new Vue({
         ...mapActions(['incrementAsync']),
         ...mapMutations(['decrement']),
         testAction () {
-            this.$store.dispatch('actionA').then(() => {
+          this.$store.dispatch('actionA').then(() => {
+          })
 
-            })
+        // onClick use the new Method name
+        // create new method `this.addMe()` that runs `this.$store.dispatch('incrementAsync')`
+        // ...mapActions({ addMe:'incrementAsync' }),
         }
     }
 });
