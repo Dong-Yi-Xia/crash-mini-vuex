@@ -7,7 +7,8 @@ const store = new Vuex.Store({
     state: {
       count: 0
     },
-    //mutation are asynchronous, capture before and after state snapshot. Need to use actions
+    //mutation are must be synchronous, capture before and after state snapshot.
+    //To handle asyn chronous we need to use actions
     //the mutations will update the state, 1st argu is always the state
     mutations: {
       increment (state) {
