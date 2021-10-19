@@ -38,10 +38,26 @@ const store = new Vuex.Store({
               }, 1000)
           })
         },
+        actionB ({ dispatch, commit }) {
+          return dispatch('actionA').then(() => {
+              commit('someOtherMutation')
+          })
+        },
+        //the commit 'gotData' will not mutate until getData() comes back
+        async actionC ({ commit }) {
+            //commit type and payload
+            commit('gotData', await getData())
+        },
+        //wait for dispatch('actionC') then
+        //the commit 'gotOtherData' will not mutate until getOtherData() comes back
+        async actionD ({ dispatch, commit} ) {
+            await dispatch('actionC')
+            commit('gotOtherData', await getOtherData())
+        }
     }
 })
 
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 new Vue({
     el: '#app',
@@ -50,6 +66,7 @@ new Vue({
     },
     computed: mapState([ 'count' ]),
     methods: {
+        //onClick use method name
         increment () {
           //calling the action with dispatch, can also pass in a payload just like mutation
           //this.$store.dispatch('incrementAsync', payload);
@@ -61,9 +78,32 @@ new Vue({
         //the methods name doesn't have to be the same as the action name.
         //the dispatch must have the action name
         testAction () {
+          //.then() waits for the promise
           this.$store.dispatch('actionA').then(() => {
 
           })
+        }
+    }
+});
+
+
+//Shorthand
+import { mapState, mapMutations, mapActions } from 'vuex';
+
+new Vue({
+    el: '#app',
+    store,
+    data: {
+    },
+    computed: mapState([ 'count' ]),
+    methods: {
+        //onClick use store type action/mutation name
+        ...mapActions(['incrementAsync']),
+        ...mapMutations(['decrement']),
+        testAction () {
+            this.$store.dispatch('actionA').then(() => {
+
+            })
         }
     }
 });

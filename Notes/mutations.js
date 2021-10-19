@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     }
 });
 
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 
 new Vue({
