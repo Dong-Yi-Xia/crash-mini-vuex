@@ -3,6 +3,9 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+//Vuex allows us to divide our store into modules.
+//Each module can contain its own state, mutations, actions, getters, and even nested modules
+
 const moduleA = {
     //add namespaced to be self contain when being called.
     namespaced: true,
@@ -133,3 +136,48 @@ store.dispatch('b/subModule/login');
 
 //getters must be in []
 store.getters['b/subModule/login'];
+
+
+
+/*
+// Binding Helpers with Namespace
+// pass the module namespace string as the first argument to the helpers
+computed: {
+  ...mapState('some/nested/module', {
+    a: state => state.a,
+    b: state => state.b
+  }),
+  ...mapGetters('some/nested/module', [
+    'someGetter', // -> this.someGetter
+    'someOtherGetter', // -> this.someOtherGetter
+  ])
+},
+methods: {
+  ...mapActions('some/nested/module', [
+    'foo', // -> this.foo()
+    'bar' // -> this.bar()
+  ])
+}
+*/
+
+// Using the createNamespacedHelpers
+import { createNamespacedHelpers } from 'vuex'
+
+const { mapState, mapActions } = createNamespacedHelpers('some/nested/module')
+
+export default {
+  computed: {
+    // look up in `some/nested/module`
+    ...mapState({
+      a: state => state.a,
+      b: state => state.b
+    })
+  },
+  methods: {
+    // look up in `some/nested/module`
+    ...mapActions([
+      'foo',
+      'bar'
+    ])
+  }
+}
